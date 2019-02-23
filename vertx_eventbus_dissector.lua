@@ -36,6 +36,8 @@ local failure_types = {
     [2] = "RECIPIENT_FAILURE"
 }
 
+-- pong
+local pf_pong                  = ProtoField.new("Pong", "vertx_eventbus.pong", ftypes.INT8)
 -- message fields
 local pf_message_length        = ProtoField.new("Message length", "vertx_eventbus.message_length", ftypes.INT32)
 local pf_wire_protocol_version = ProtoField.new("Wire protocol version", "vertx_eventbus.wire_protocol_version", ftypes.INT8)
@@ -68,6 +70,7 @@ local pf_failure_includes_msg  = ProtoField.new("Failure includes message", "ver
 local pf_failure_message       = ProtoField.new("Failure message", "vertx_eventbus.failure_message", ftypes.STRING)
 
 vertx_eventbus.fields = {
+    pf_pong,
     pf_message_length,
     pf_wire_protocol_version,
     pf_codec_id,
@@ -240,6 +243,15 @@ function vertx_eventbus.dissector(tvbuf,pktinfo,root)
 
     local pos = 0
 
+    -- handle pong
+    if pktlen == 1 then
+        if tvbuf:range(pos, 1):int() == 1 then
+            pos = read_fixed_length(tvbuf, pos, tree, 1, pf_pong)
+        end
+        return pos
+    end
+
+    -- handle event bus message
     pos = read_fixed_length(tvbuf, pos, tree, 4, pf_message_length)
     pos = read_fixed_length(tvbuf, pos, tree, 1, pf_wire_protocol_version)
     pos = read_fixed_length(tvbuf, pos, tree, 1, pf_codec_id)
