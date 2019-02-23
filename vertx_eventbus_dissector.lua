@@ -282,11 +282,6 @@ function vertx_eventbus.dissector(tvbuf,pktinfo,root)
     return pos
 end
 
-
-DissectorTable.get("tcp.port"):add(60680, vertx_eventbus)
-DissectorTable.get("tcp.port"):add(42831, vertx_eventbus)
-DissectorTable.get("tcp.port"):add(45129, vertx_eventbus)
-
-
-DissectorTable.get("tcp.port"):add(39681, vertx_eventbus)
-DissectorTable.get("tcp.port"):add(36071, vertx_eventbus)
+-- There's no specific TCP protocol the Vert.x EventBus uses.
+-- Add our dissector to Wireshark's "Decode As..." list
+DissectorTable.get("tcp.port"):add_for_decode_as(vertx_eventbus)
