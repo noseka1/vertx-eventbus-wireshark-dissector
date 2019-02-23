@@ -1,11 +1,13 @@
-dprint = function(...)
-    print(table.concat({"Lua:", ...}," "))
+local debug_level = 1
+
+function dprint(...)
+    if debug_level > 0 then
+        print(table.concat({"Lua:", ...}," "))
+    end
 end
 
-dprint2 = dprint
-
-dprint2("Wireshark version = ", get_version())
-dprint2("Lua version = ", _VERSION)
+dprint("Wireshark version = ", get_version())
+dprint("Lua version = ", _VERSION)
 
 local vertx_eventbus = Proto("vertx_eventbus", "Vert.x EventBus Protocol")
 
@@ -231,7 +233,7 @@ function decode_headers(tvbuf, pos, tree)
 end
 
 function vertx_eventbus.dissector(tvbuf,pktinfo,root)
-    dprint2("vertx_eventbus.dissector called")
+    dprint("vertx_eventbus.dissector called")
 
     -- set the protocol column to show our protocol name
     pktinfo.cols.protocol:set("Vert.x EventBus")
@@ -274,7 +276,7 @@ function vertx_eventbus.dissector(tvbuf,pktinfo,root)
         pos = pktlen
     end
 
-    dprint2("vertx_eventbus.dissector returning",pos)
+    dprint("vertx_eventbus.dissector returning",pos)
 
     -- tell wireshark how much of tvbuff we dissected
     return pos
