@@ -100,6 +100,13 @@ local message_length_field = Field.new("vertx_eventbus.message_length")
 local message_codec_id = Field.new("vertx_eventbus.codec_id")
 local message_failure_includes_msg = Field.new("vertx_eventbus.failure_includes_message")
 
+-- expert info
+local ef_reply_exception = ProtoExpert.new("vertx_eventbus.response.expert", "Vert.x EventBus Reply Exception", expert.group.RESPONSE_CODE, expert.severity.CHAT)
+
+vertx_eventbus.experts = {
+    ef_reply_exception
+}
+
 function read_fixed_length(tvbuf, pos, tree, len, item_type)
     tree:add(item_type, tvbuf:range(pos, len))
     return pos + len
@@ -174,6 +181,7 @@ function body_read_json_array(tvbuf, pos, tree)
 end
 
 function body_read_reply_exception(tvbuf, pos, tree)
+    tree:add_proto_expert_info(ef_reply_exception, "Reply exception")
     pos = read_fixed_length(tvbuf, pos, tree, 1, pf_failure_type)
     pos = read_fixed_length(tvbuf, pos, tree, 4, pf_failure_code)
     pos = read_fixed_length(tvbuf, pos, tree, 1, pf_failure_includes_msg)
