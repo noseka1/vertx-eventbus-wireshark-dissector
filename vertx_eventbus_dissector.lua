@@ -1,3 +1,33 @@
+----------------------------------------
+-- script-name: vertx_eventbus_dissector.lua
+--
+-- author: Ales Nosek <ales.nosek@gmail.com>
+-- Copyright (c) 2019, Ales Nosek
+-- This code is in the Public Domain, or the BSD (3 clause) license if Public Domain does not apply
+-- in your country.
+--
+-- To create this script I used the dissector.lua example Lua script by Hadriel Kaplan found at:
+-- https://wiki.wireshark.org/Lua/Examples
+--
+-- OVERVIEW:
+-- This script creates an elementary dissector for the Vert.x EventBus protocol. This is the protocol used
+-- by Vert.x nodes that communicate over EventBus in clustered mode.
+--
+-- HOW TO RUN THIS SCRIPT:
+-- Wireshark and Tshark support multiple ways of loading Lua scripts: through a dofile() call in init.lua,
+-- through the file being in either the global or personal plugins directories, or via the command line.
+-- See the Wireshark User's Guide chapter on Lua (https://wiki.wireshark.org/Lua). This sample command-line
+-- worked for me:
+--
+-- $ wireshark -X lua_script:vertx_eventbus_dissector.lua
+--
+-- Once the script is loaded, it creates a new protocol named "Vert.x EventBus Protocol" (or "VERTX_EVENTBUS"
+-- in some places).  If you have a capture file with Vert.x EventBus packets in it, simply select one in the
+-- Packet List pane, right-click on it, and select "Decode As ...", and then in the dialog box that shows up
+-- scroll down the list of protocols to one called "VERTX_EVENTBUS", select that and click the "ok" or "apply"
+-- button.  Voila`, you're now decoding Vert.x EventBus packets using the simplistic dissector in this script.
+--
+----------------------------------------
 local debug_level = 1
 
 function dprint(...)
