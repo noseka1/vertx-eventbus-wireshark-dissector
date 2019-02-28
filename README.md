@@ -3,7 +3,8 @@
 ## Overview
 
 The [vertx_eventbus_dissector.lua](vertx_eventbus_dissector.lua) script allows you to analyze Vert.x EventBus communication protocol in Wireshark.
-This is the protocol used by Vert.x nodes that communicate over EventBus in clustered mode. See the script for more information on how to use it in Wireshark.
+This is the protocol used by Vert.x nodes that communicate over EventBus in clustered mode. See the [script](vertx_eventbus_dissector.lua) for more
+information on how to enable this dissector in Wireshark.
 
 ## Sample Capture File
 
