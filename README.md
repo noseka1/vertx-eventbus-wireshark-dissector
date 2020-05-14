@@ -12,4 +12,8 @@ You can use [this](vertx_eventbus_sample_capture.pcapng) Vert.x EventBus capture
 
 ## Screenshot
 
+![Wireshark decode as](vertx_eventbus_wireshark_screenshot_decode_as.png)
+
+![Wireshark decode as dialog](vertx_eventbus_wireshark_screenshot_decode_as_dialog.png)
+
 ![Wireshark screenshot](vertx_eventbus_wireshark_screenshot.png)
