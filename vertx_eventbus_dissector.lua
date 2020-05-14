@@ -23,9 +23,10 @@
 --
 -- Once the script is loaded, it creates a new protocol named "Vert.x EventBus Protocol" (or "VERTX_EVENTBUS"
 -- in some places).  If you have a capture file with Vert.x EventBus packets in it, simply select one in the
--- Packet List pane, right-click on it, and select "Decode As ...", and then in the dialog box that shows up
--- scroll down the list of protocols to one called "VERTX_EVENTBUS", select that and click the "ok" or "apply"
--- button.  Voila`, you're now decoding Vert.x EventBus packets using the simplistic dissector in this script.
+-- Packet List pane, right-click on it, and select "Decode As ...", In the dialog box that shows up, click the
+-- + button to add a decoding rule. Click the (none) in the last column of the decoding rule. Scroll down the
+-- list of protocols to one called "VERTX_EVENTBUS", select that and click the "ok" or "apply" button.
+-- Voila`, you're now decoding Vert.x EventBus packets using the simplistic dissector in this script.
 --
 ----------------------------------------
 local debug_level = 1
