@@ -10,7 +10,7 @@ information on how to enable this dissector in Wireshark.
 
 You can use [this](vertx_eventbus_sample_capture.pcapng) Vert.x EventBus capture file to check the dissector out.
 
-## Screenshot
+## Screenshots
 
 ![Wireshark decode as](vertx_eventbus_wireshark_screenshot_decode_as.png)
 
