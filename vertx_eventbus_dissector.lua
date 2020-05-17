@@ -156,6 +156,20 @@ function read_var_length(tvbuf, pos, tree, item_type)
     return pos + 4 + len
 end
 
+function read_var_length_json(tvbuf, pos, tree, item_type, pktinfo)
+    local len = tvbuf:range(pos, 4):int()
+    if len > 0 then
+        item = tree:add(item_type, tvbuf:range(pos + 4, len))
+        status, json_dissector = pcall(function () return Dissector.get("json") end)
+        if status then
+            json_dissector:call(tvbuf:range(pos + 4, len):tvb(), pktinfo, item)
+        else
+            dprint("Failed to obtain json dissector:", tostring(json_dissector))
+        end
+    end
+    return pos + 4 + len
+end
+
 function body_read_null(tvbuf, pos, tree)
     return pos
 end
@@ -208,12 +222,12 @@ function body_read_byte_array(tvbuf, pos, tree)
     return read_var_length(tvbuf, pos, tree, pf_body_bytes)
 end
 
-function body_read_json_object(tvbuf, pos, tree)
-    return read_var_length(tvbuf, pos, tree, pf_body_string)
+function body_read_json_object(tvbuf, pos, tree, pktinfo)
+    return read_var_length_json(tvbuf, pos, tree, pf_body_string, pktinfo)
 end
 
-function body_read_json_array(tvbuf, pos, tree)
-    return read_var_length(tvbuf, pos, tree, pf_body_string)
+function body_read_json_array(tvbuf, pos, tree, pktinfo)
+    return read_var_length_json(tvbuf, pos, tree, pf_body_string, pktinfo)
 end
 
 function body_read_reply_exception(tvbuf, pos, tree)
@@ -301,7 +315,11 @@ function vertx_eventbus.dissector(tvbuf,pktinfo,root)
     pos = decode_headers(tvbuf, pos, tree)
 
     if codec_id >= 0 and codec_id <= 15 then
-        pos = body_decoders[codec_id](tvbuf, pos, tree)
+        if codec_id == 13 or codec_id == 14 then
+            pos = body_decoders[codec_id](tvbuf, pos, tree, pktinfo)
+        else
+            pos = body_decoders[codec_id](tvbuf, pos, tree)
+        end
     else
         tree:add(pf_body_bytes, tvbuf:range(pos, pktlen - pos))
         pos = pktlen
